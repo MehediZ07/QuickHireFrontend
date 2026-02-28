@@ -1,11 +1,15 @@
-import { ChevronRightIcon, PenTool, TrendingUp, Megaphone, DollarSign, Monitor, Code, Briefcase, Users } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ChevronRightIcon, Palette, TrendingUp, Megaphone, DollarSign, MonitorSmartphone, Wrench, Briefcase, Users } from "lucide-react";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
+import { jobsApi } from "../../../../services/api";
+import { Job } from "../../../../types/api";
 
 const categories = [
   {
     name: "Design",
-    Icon: PenTool,
+    Icon: Palette,
     jobCount: 235,
   },
   {
@@ -25,12 +29,12 @@ const categories = [
   },
   {
     name: "Technology",
-    Icon: Monitor,
+    Icon: MonitorSmartphone,
     jobCount: 436,
   },
   {
     name: "Engineering",
-    Icon: Code,
+    Icon: Wrench,
     jobCount: 542,
   },
   {
@@ -46,6 +50,22 @@ const categories = [
 ];
 
 export const JobCategoriesSection = (): JSX.Element => {
+  const navigate = useNavigate();
+  const [jobs, setJobs] = useState<Job[]>([]);
+
+  useEffect(() => {
+    jobsApi.getAllJobs().then(setJobs).catch(console.error);
+  }, []);
+
+  const getCategoryCount = (category: string) => {
+    return jobs.filter(job => job.category.toLowerCase() === category.toLowerCase()).length;
+  };
+
+  const categoriesWithCounts = categories.map(cat => ({
+    ...cat,
+    jobCount: getCategoryCount(cat.name)
+  }));
+
   return (
     <section className="flex flex-col items-start gap-12 pt-[72px] pb-0 px-4 md:px-[124px] w-full bg-neutrals-0">
       <header className="flex items-end justify-between w-full">
@@ -56,6 +76,7 @@ export const JobCategoriesSection = (): JSX.Element => {
 
         <Button
           variant="ghost"
+          onClick={() => navigate("/jobs")}
           className="inline-flex items-center gap-4 p-0 h-auto hover:bg-transparent"
         >
           <span className="font-body-normal-semibold font-[number:var(--body-normal-semibold-font-weight)] text-brandsprimary text-[length:var(--body-normal-semibold-font-size)] tracking-[var(--body-normal-semibold-letter-spacing)] leading-[var(--body-normal-semibold-line-height)] [font-style:var(--body-normal-semibold-font-style)]">
@@ -67,9 +88,10 @@ export const JobCategoriesSection = (): JSX.Element => {
 
       <div className="flex flex-col items-start gap-8 w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
-          {categories.map((category, index) => (
+          {categoriesWithCounts.map((category, index) => (
             <Card
               key={index}
+              onClick={() => navigate(`/jobs?category=${category.name}`)}
               className="group cursor-pointer transition-all hover:shadow-lg bg-neutrals-0 border-[#d6ddeb] hover:bg-brandsprimary hover:border-brandsprimary"
             >
               <CardContent className="flex flex-col items-start gap-8 p-8">

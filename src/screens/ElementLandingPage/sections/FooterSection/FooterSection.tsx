@@ -1,6 +1,7 @@
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Separator } from "../../../../components/ui/separator";
+import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react";
 
 const aboutLinks = [
   { label: "Companies", href: "#" },
@@ -23,7 +24,7 @@ export const FooterSection = (): JSX.Element => {
       <div className="max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
           <div className="flex flex-col gap-8">
-            <img className="h-8 w-32 bg-white" src="assets/images/Logo.png" alt="QuickHire Logo" />
+            <img className="h-8 w-32" src="/assets/images/Logo 2.png" alt="QuickHire Logo" />
             <p className="font-body-normal-regular font-[number:var(--body-normal-regular-font-weight)] text-neutrals-20 text-[length:var(--body-normal-regular-font-size)] tracking-[var(--body-normal-regular-letter-spacing)] leading-[var(--body-normal-regular-line-height)] [font-style:var(--body-normal-regular-font-style)]">
               Great platform for the job seeker that passionate about startups.
               Find your dream job easier.
@@ -88,13 +89,25 @@ export const FooterSection = (): JSX.Element => {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="font-body-normal-medium font-[number:var(--body-normal-medium-font-weight)] text-white text-[length:var(--body-normal-medium-font-size)] tracking-[var(--body-normal-medium-letter-spacing)] leading-[var(--body-normal-medium-line-height)] [font-style:var(--body-normal-medium-font-style)] opacity-50">
-            2021 @ QuickHire. All rights reserved.
+            {new Date().getFullYear()} @ QuickHire. All rights reserved.
           </p>
-          <img
-            className="w-64 h-8"
-            alt="Social media icons"
-            src="/social-media-icons.png"
-          />
+          <div className="flex gap-6">
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Facebook className="w-5 h-5" />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Twitter className="w-5 h-5" />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Instagram className="w-5 h-5" />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Linkedin className="w-5 h-5" />
+            </a>
+            <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <Youtube className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

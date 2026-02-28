@@ -1,10 +1,10 @@
 export const CompaniesSection = (): JSX.Element => {
   const companies = [
-    { name: "Vodafone", logo: "assets/images/vodafone-2017-logo.png" },
-    { name: "Intel", logo: "assets/images/intel-3.png" },
-    { name: "Tesla", logo: "assets/images/tesla-9 1.png" },
-    { name: "AMD", logo: "assets/images/amd-logo-1.png" },
-    { name: "Talkit", logo: "assets/images/talkit 1.png" },
+    { name: "Vodafone", logo: "/assets/images/vodafone-2017-logo.png" },
+    { name: "Intel", logo: "/assets/images/intel-3.png" },
+    { name: "Tesla", logo: "/assets/images/tesla-9 1.png" },
+    { name: "AMD", logo: "/assets/images/amd-logo-1.png" },
+    { name: "Talkit", logo: "/assets/images/talkit 1.png" },
   ];
 
   return (

@@ -1,84 +1,20 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChevronRightIcon } from "lucide-react";
 import { Badge } from "../../../../components/ui/badge";
 import { Button } from "../../../../components/ui/button";
 import { Card, CardContent } from "../../../../components/ui/card";
-
-const jobsData = [
-  {
-    id: 1,
-    title: "Social Media Assistant",
-    company: "Nomad",
-    location: "Paris, France",
-    logo: "https://logo.clearbit.com/nomadlist.com",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-  {
-    id: 2,
-    title: "Brand Designer",
-    company: "Dropbox",
-    location: "San Fransisco, USA",
-    logo: "https://logo.clearbit.com/dropbox.com",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-  {
-    id: 3,
-    title: "Interactive Developer",
-    company: "Terraform",
-    location: "Hamburg, Germany",
-    logo: "https://logo.clearbit.com/terraform.io",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-  {
-    id: 4,
-    title: "HR Manager",
-    company: "Packer",
-    location: "Lucern, Switzerland",
-    logo: "https://logo.clearbit.com/packer.io",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-  {
-    id: 5,
-    title: "Social Media Assistant",
-    company: "Netlify",
-    location: "Paris, France",
-    logo: "https://logo.clearbit.com/netlify.com",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-  {
-    id: 6,
-    title: "Brand Designer",
-    company: "Maze",
-    location: "San Fransisco, USA",
-    logo: "https://logo.clearbit.com/maze.co",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-  {
-    id: 7,
-    title: "Interactive Developer",
-    company: "Udacity",
-    location: "Hamburg, Germany",
-    logo: "https://logo.clearbit.com/udacity.com",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-  {
-    id: 8,
-    title: "HR Manager",
-    company: "Webflow",
-    location: "Lucern, Switzerland",
-    logo: "https://logo.clearbit.com/webflow.com",
-    type: "Full-Time",
-    categories: ["Marketing", "Design"],
-  },
-];
+import { jobsApi } from "../../../../services/api";
+import { Job } from "../../../../types/api";
 
 export const LatestJobsSection = (): JSX.Element => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    jobsApi.getAllJobs().then(data => setJobs(data.slice(0, 8))).catch(console.error);
+  }, []);
+
   return (
     <section className="relative w-full py-[72px] px-4 md:px-[124px] bg-[#F8F8FD] overflow-hidden">
       <img
@@ -96,6 +32,7 @@ export const LatestJobsSection = (): JSX.Element => {
 
           <Button
             variant="ghost"
+            onClick={() => navigate("/jobs")}
             className="gap-4 font-body-normal-semibold font-[number:var(--body-normal-semibold-font-weight)] text-brandsprimary text-[length:var(--body-normal-semibold-font-size)] tracking-[var(--body-normal-semibold-letter-spacing)] leading-[var(--body-normal-semibold-line-height)] [font-style:var(--body-normal-semibold-font-style)] hover:bg-transparent"
           >
             Show all jobs
@@ -104,17 +41,28 @@ export const LatestJobsSection = (): JSX.Element => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-4">
-          {jobsData.map((job) => (
+          {jobs.map((job) => (
             <Card
               key={job.id}
+              onClick={() => navigate(`/jobs/${job.id}`)}
               className="bg-neutrals-0 border-0 shadow-none hover:shadow-md transition-shadow cursor-pointer"
             >
               <CardContent className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 p-6 md:p-10">
-                <img
-                  className="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0 object-contain"
-                  alt={`${job.company} logo`}
-                  src={job.logo}
-                />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0 bg-gray-100 rounded flex items-center justify-center">
+                  {job.logo ? (
+                    <img
+                      className="w-full h-full object-contain"
+                      alt={`${job.company} logo`}
+                      src={job.logo}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        e.currentTarget.parentElement!.innerHTML = `<span class="text-2xl font-bold text-brandsprimary">${job.company.charAt(0)}</span>`;
+                      }}
+                    />
+                  ) : (
+                    <span className="text-2xl font-bold text-brandsprimary">{job.company.charAt(0)}</span>
+                  )}
+                </div>
 
                 <div className="flex flex-col gap-2 flex-1 w-full">
                   <h3 className="font-display-2 font-[number:var(--display-2-font-weight)] text-neutrals-100 text-base sm:text-lg md:text-[length:var(--display-2-font-size)] tracking-[var(--display-2-letter-spacing)] leading-[var(--display-2-line-height)] [font-style:var(--display-2-font-style)]">
@@ -142,16 +90,9 @@ export const LatestJobsSection = (): JSX.Element => {
 
                     <Badge
                       variant="outline"
-                      className="border-[#feb835] text-accentsyellow hover:bg-transparent rounded-[80px] px-2.5 py-1.5 font-body-small-semibold font-[number:var(--body-small-semibold-font-weight)] text-[length:var(--body-small-semibold-font-size)] leading-[var(--body-small-semibold-line-height)] tracking-[var(--body-small-semibold-letter-spacing)] [font-style:var(--body-small-semibold-font-style)]"
-                    >
-                      {job.categories[0]}
-                    </Badge>
-
-                    <Badge
-                      variant="outline"
                       className="border-[#4640de] text-brandsprimary hover:bg-transparent rounded-[80px] px-2.5 py-1.5 font-body-small-semibold font-[number:var(--body-small-semibold-font-weight)] text-[length:var(--body-small-semibold-font-size)] leading-[var(--body-small-semibold-line-height)] tracking-[var(--body-small-semibold-letter-spacing)] [font-style:var(--body-small-semibold-font-style)]"
                     >
-                      {job.categories[1]}
+                      {job.category}
                     </Badge>
                   </div>
                 </div>
